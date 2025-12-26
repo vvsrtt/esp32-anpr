@@ -7,18 +7,23 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Only POST allowed' });
   }
 
-  // Отримуємо фото від ESP32
-  const chunks = [];
-  for await (const chunk of req) {
-    chunks.push(chunk);
-  }
-  const imageData = Buffer.concat(chunks);
-
-  // Перетворюємо в base64
-  const base64Image = imageData.toString('base64');
-
-  // Надсилаємо в OCR.Space
   try {
+    // Отримуємо фото від ESP32
+    const chunks = [];
+    for await (const chunk of req) {
+      chunks.push(chunk);
+    }
+    const imageData = Buffer.concat(chunks);
+
+    // Перетворюємо в base64
+    const base64Image = imageData.toString('base64');
+
+    // Перевірка API ключа
+    if (!process.env.OCR_API_KEY) {
+      throw new Error('OCR_API_KEY not set');
+    }
+
+    // Надсилаємо в OCR.Space
     const ocrResponse = await fetch('https://api.ocr.space/parse/image', {
       method: 'POST',
       headers: {
@@ -55,6 +60,6 @@ export default async function handler(req, res) {
 
   } catch (error) {
     console.error('OCR Error:', error);
-    res.status(500).json({ error: 'OCR failed' });
+    res.status(500).json({ error: 'Server error: ' + error.message });
   }
 }
