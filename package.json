@@ -1,6 +1,7 @@
 {
   "name": "esp32-anpr",
   "version": "1.0.0",
+  "type": "module", // ← ДОДАТИ ЦЕ
   "main": "api/ocr.js",
   "scripts": {
     "dev": "vercel dev"
