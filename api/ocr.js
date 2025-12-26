@@ -40,9 +40,9 @@ export default async function handler(req, res) {
 
     const result = await ocrResponse.json();
 
-    // Отримуємо текст
+    // Безпечне отримання тексту
     let plateText = '';
-    if (result.ParsedResults && result.ParsedResults.length > 0) {
+    if (result && result.ParsedResults && result.ParsedResults.length > 0) {
       plateText = result.ParsedResults[0].ParsedText || '';
     }
 
@@ -55,11 +55,15 @@ export default async function handler(req, res) {
     res.status(200).json({
       plate: cleanPlate,
       allowed: allowed,
-      raw: plateText
+      raw: plateText,
+      success: true
     });
 
   } catch (error) {
     console.error('OCR Error:', error);
-    res.status(500).json({ error: 'Server error: ' + error.message });
+    res.status(500).json({
+      error: 'Server error: ' + error.message,
+      success: false
+    });
   }
 }
