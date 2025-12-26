@@ -1,7 +1,7 @@
 {
   "name": "esp32-anpr",
   "version": "1.0.0",
-  "type": "module", // ← ДОДАТИ ЦЕ
+  "type": "module",
   "main": "api/ocr.js",
   "scripts": {
     "dev": "vercel dev"
@@ -10,3 +10,4 @@
     "node-fetch": "^3.3.2"
   }
 }
+
